@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>NU1803</NoWarn>
+  </PropertyGroup>
+</Project>

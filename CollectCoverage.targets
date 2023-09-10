@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" Version="3.2.0" IsImplicitlyDefined="true" PrivateAssets="all" Publish="true" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <CoverletArtifactsDir>$(MSBuildStartupDirectory)/CoverletReport</CoverletArtifactsDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- https://github.com/coverlet-coverage/coverlet/blob/master/Documentation/MSBuildIntegration.md -->
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutputFormat>cobertura</CoverletOutputFormat>
+    <CoverletOutput>$(CoverletArtifactsDir)/$(MSBuildProjectName).xml</CoverletOutput>
+    <!-- https://github.com/coverlet-coverage/coverlet/tree/v1.1.0#threshold -->
+    <Threshold>0</Threshold>
+  </PropertyGroup>
+
+</Project>
