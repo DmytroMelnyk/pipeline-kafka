@@ -54,15 +54,12 @@ jobs:
     #   with:
     #     version: 'v2.14.1'
 
-    # - name: 'Setup NodeJS'
-    #   uses: actions/setup-node@v3
-    #   with:
-    #     node-version: '18'
-
     - name: 'Checkout'
       uses: actions/checkout@v4
-      with:
+      with :
         fetch-depth: 0
+        # https://github.com/semantic-release/semantic-release/issues/1890#issuecomment-974512960
+        ref: ${{ github.head_ref }}
 
     - uses: actions/setup-dotnet@v3
       with:
@@ -102,9 +99,22 @@ jobs:
         recreate: true
         path: code-coverage-results.md
 
-    # - name: Upload coverage report artifact
-    #   uses: actions/upload-artifact@v2.2.3
-    #   with:
-    #     name: CoverageReport
-    #     path: coveragereport
+    - name: 'Setup NodeJS'
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Get Version And Publish Nuget
+      # https://github.com/semantic-release/semantic-release/issues/1890#issuecomment-974512960
+      run: |
+        unset GITHUB_ACTIONS
+        export NEXT_VERSION=$(npx semantic-release --no-ci --dry-run --plugins "@semantic-release/commit-analyzer" | grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+.*' | sed -E "/[0-9]+\.[0-9]+\.[0-9]+-.+/ s/$/.$(git rev-parse --short HEAD)/")
+        echo $NEXT_VERSION | tee build-version.txt
+
+    - name: Upload build-version.txt
+      uses: actions/upload-artifact@v2
+      with: 
+        name: build-version.txt
+        path: build-version.txt
+
 
