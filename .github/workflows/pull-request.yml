@@ -54,11 +54,6 @@ jobs:
     #   with:
     #     version: 'v2.14.1'
 
-    # - name: 'Setup NodeJS'
-    #   uses: actions/setup-node@v3
-    #   with:
-    #     node-version: '18'
-
     - name: 'Checkout'
       uses: actions/checkout@v4
       with:
@@ -101,6 +96,11 @@ jobs:
       with:
         recreate: true
         path: code-coverage-results.md
+
+    - name: 'Setup NodeJS'
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
 
     - name: Get Version And Publish Nuget
       run: |
