@@ -79,7 +79,7 @@ jobs:
       uses: danielpalme/ReportGenerator-GitHub-Action@5.1.26
       with:
         reports: './CoverletReport/*.xml'
-        targetdir: './CoverletReport'
+        targetdir: './coveragereport'
         reporttypes: 'HtmlInline;Cobertura'
     
     - name: Upload coverage report artifact
@@ -88,8 +88,3 @@ jobs:
         name: CoverageReport
         path: coveragereport
 
-    - name: Get Cover 
-      uses: orgoro/coverage@v3.1
-      with:
-          coverageFile: ./coverage.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
