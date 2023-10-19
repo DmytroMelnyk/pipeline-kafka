@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/DmytroMelnyk/pipeline-kafka/compare/v1.0.2...v1.1.0) (2023-10-19)
+
+
+### Features
+
+* Print semantic version ([#6](https://github.com/DmytroMelnyk/pipeline-kafka/issues/6)) ([092e904](https://github.com/DmytroMelnyk/pipeline-kafka/commit/092e90443bd929cea0b5407a11e1abb2e647e375))
+
 ## [1.0.2](https://github.com/DmytroMelnyk/pipeline-kafka/compare/v1.0.1...v1.0.2) (2023-10-19)
 
 
