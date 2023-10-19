@@ -56,8 +56,9 @@ jobs:
 
     - name: 'Checkout'
       uses: actions/checkout@v4
-      with:
+      with :
         fetch-depth: 0
+        ref: ${{ github.head_ref }}
 
     - uses: actions/setup-dotnet@v3
       with:
