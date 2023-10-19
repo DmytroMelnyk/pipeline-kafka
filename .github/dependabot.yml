@@ -4,10 +4,18 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
       interval: "weekly"
+    labels:
+      - "dependencies"
+      - "nuget"
+    commit-message:
+      prefix: chore
     groups:
       # Specify a name for the group, which will be used in pull request titles
       # and branch names

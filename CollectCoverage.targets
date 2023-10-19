@@ -2,7 +2,7 @@
 <Project>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="3.2.0" IsImplicitlyDefined="true" PrivateAssets="all" Publish="true" />
+    <PackageReference Include="coverlet.msbuild" Version="6.0.0" IsImplicitlyDefined="true" PrivateAssets="all" Publish="true" />
   </ItemGroup>
 
   <PropertyGroup>
