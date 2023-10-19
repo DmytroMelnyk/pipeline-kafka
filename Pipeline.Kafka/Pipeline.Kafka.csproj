@@ -16,9 +16,4 @@
     <!--<PackageReference Include="System.Linq.Async" Version="6.0.1" />-->
   </ItemGroup>
 
-  <ItemGroup>
-    <InternalsVisibleTo Include="$(AssemblyName).Tests" />
-    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
-  </ItemGroup>
-
 </Project>
