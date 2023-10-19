@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/DmytroMelnyk/pipeline-kafka/compare/v1.0.0...v1.0.1) (2023-10-19)
+
+
+### Bug Fixes
+
+* Remove coverlet report ([#4](https://github.com/DmytroMelnyk/pipeline-kafka/issues/4)) ([00e7a5b](https://github.com/DmytroMelnyk/pipeline-kafka/commit/00e7a5b7b8ee4a67fbccbebcb6a1ec95e51fde1d))
+
 # 1.0.0 (2023-10-19)
 
 
