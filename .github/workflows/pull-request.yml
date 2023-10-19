@@ -109,5 +109,6 @@ jobs:
           --plugins "@semantic-release/commit-analyzer" \
           | grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+.*' \
           | sed -E "/[0-9]+\.[0-9]+\.[0-9]+-.+/ s/$/.$(git rev-parse --short HEAD)/")
+        echo $NEXT_VERSION
 
 
