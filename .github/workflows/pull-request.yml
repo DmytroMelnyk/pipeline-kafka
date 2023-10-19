@@ -105,6 +105,12 @@ jobs:
     - name: Get Version And Publish Nuget
       run: |
         export NEXT_VERSION=$(npx semantic-release --no-ci --dry-run --plugins "@semantic-release/commit-analyzer" | grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+.*' | sed -E "/[0-9]+\.[0-9]+\.[0-9]+-.+/ s/$/.$(git rev-parse --short HEAD)/")
-        echo $NEXT_VERSION
+        echo $NEXT_VERSION | tee build-version.txt
+
+    - name: Upload build-version.txt
+      uses: actions/upload-artifact@v2
+      with: 
+        name: build-version.txt
+        path: build-version.txt
 
 
