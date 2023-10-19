@@ -5,6 +5,14 @@
     <NoWarn>NU1803</NoWarn>
   </PropertyGroup>
 
+  <Import Project=".\CollectCoverage.targets"
+          Condition="$(MSBuildProjectName.EndsWith('Tests'))" />
+
+  <ItemGroup Condition="!$(MSBuildProjectName.EndsWith('Tests'))">
+    <InternalsVisibleTo Include="$(AssemblyName).Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference
       Include="SonarAnalyzer.CSharp"
