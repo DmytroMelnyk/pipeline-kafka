@@ -1,4 +1,3 @@
-﻿using System.Collections.Generic;
 using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -82,14 +81,14 @@ public class KafkaBatchTests
     }
 
     [Test]
-    public void WhenKafkaWasRegistered_ExpectedAllOk()
+    public void WhenKafkaWasRegisteredExpectedAllOk()
     {
         var messageProviders = _serviceProvider.GetRequiredService<IEnumerable<IHostedService>>().ToList();
         Assert.That(messageProviders, Has.Count.EqualTo(1));
     }
 
     [Test]
-    public async Task IMessageHandler_WhenMessagePublished_ExpectedMessageWasRead()
+    public async Task IMessageHandlerWhenMessagePublishedExpectedMessageWasRead()
     {
         _personTopicConsumerMock
             .SetupSequence(x => x.Consume(It.IsAny<CancellationToken>()))
@@ -120,11 +119,11 @@ public class KafkaBatchTests
             await kafkaMessagePublisher.StopAsync(CancellationToken.None);
         }
 
-        var p1Link = (GenericBatchLink<Ignore, PersonV1>)_serviceProvider
+        var p1Link = (GenericBatchLink<Ignore, PersonV1>) _serviceProvider
             .GetServices<IBatchPipelineLink<Ignore, PersonV1>>()
             .First(x => x is GenericBatchLink<Ignore, PersonV1>);
 
-        var p2Link = (GenericBatchLink<Ignore, PersonV2>)_serviceProvider
+        var p2Link = (GenericBatchLink<Ignore, PersonV2>) _serviceProvider
             .GetServices<IBatchPipelineLink<Ignore, PersonV2>>()
             .First(x => x is GenericBatchLink<Ignore, PersonV2>);
 
@@ -159,7 +158,7 @@ public class KafkaBatchTests
 
 public class BatchObsoleteNotificator : IBatchPipelineLink<Ignore, object>
 {
-    public Task RunAsync(IBatch<IKafkaConsumeResult<Ignore, object>> messages, Func<Task> next, CancellationToken cancellationToken)
+    public Task RunAsync(IBatch<IKafkaConsumeResult<Ignore, object>> message, Func<Task> next, CancellationToken cancellationToken)
     {
         Console.WriteLine("Obsolete message");
         return next();
@@ -168,9 +167,9 @@ public class BatchObsoleteNotificator : IBatchPipelineLink<Ignore, object>
 
 public class GenericBatchLink<TKey, TValue> : IBatchPipelineLink<TKey, TValue>
 {
-    public int Counter = 0;
+    public int Counter;
 
-    public Task RunAsync(IBatch<IKafkaConsumeResult<TKey, TValue>> messages, Func<Task> next, CancellationToken cancellationToken)
+    public Task RunAsync(IBatch<IKafkaConsumeResult<TKey, TValue>> message, Func<Task> next, CancellationToken cancellationToken)
     {
         Interlocked.Increment(ref Counter);
         return next();

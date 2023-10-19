@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Pipeline.Kafka.PipelineLinks;
 
@@ -17,14 +17,14 @@ public sealed class BatchCompactedLink<TKey, TValue, TCompactionKey> : IBatchPip
         _compactionKeySelector = compactionKeySelector;
     }
 
-    public Task RunAsync(IBatch<IKafkaConsumeResult<TKey, TValue>> batch, Func<Task> next, CancellationToken cancellationToken)
+    public Task RunAsync(IBatch<IKafkaConsumeResult<TKey, TValue>> message, Func<Task> next, CancellationToken cancellationToken)
     {
-        if (batch.IsReadOnly)
+        if (message.IsReadOnly)
         {
             return next();
         }
 
-        var indexesToRemove = batch
+        var indexesToRemove = message
             .Select((x, idx) => (compactionKey: _compactionKeySelector(x), idx))
             .GroupBy(x => x.compactionKey, x => x.idx, (_, indexes) => indexes.SkipLast(1), _equalityComparer)
             .SelectMany(x => x)
@@ -32,12 +32,12 @@ public sealed class BatchCompactedLink<TKey, TValue, TCompactionKey> : IBatchPip
             .ToList();
 
         var removedConsumeResults = indexesToRemove
-            .Select(idx => batch[idx].TopicPartitionOffset)
+            .Select(idx => message[idx].TopicPartitionOffset)
             .ToList();
 
         foreach (var idx in indexesToRemove)
         {
-            batch.RemoveAt(idx);
+            message.RemoveAt(idx);
         }
 
         _logger.LogInformation("Messages that were compacted: {@compactedTPOs}", removedConsumeResults);

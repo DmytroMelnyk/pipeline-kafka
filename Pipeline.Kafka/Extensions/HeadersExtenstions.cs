@@ -1,6 +1,6 @@
-﻿using Confluent.Kafka;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using Confluent.Kafka;
 
 namespace Pipeline.Kafka.Extensions;
 

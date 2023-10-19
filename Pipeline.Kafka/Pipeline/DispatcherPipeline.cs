@@ -25,9 +25,6 @@ internal class DispatcherPipeline<TKey, TValue> : IChainOfResponsibility<Consume
         _messageHandlers = messageHandlers;
     }
 
-    public Task ExecuteAsync(ConsumeResult<byte[], byte[]> consumeResult, CancellationToken cancellationToken) =>
-        ((IChainOfResponsibility<ConsumeResult<byte[], byte[]>>)this).ExecuteAsyncImpl(_beforeChain.GetEnumerator(), consumeResult, cancellationToken);
-
     Task IChainOfResponsibility<ConsumeResult<byte[], byte[]>>.ExecuteHandlerAsync(ConsumeResult<byte[], byte[]> consumeResult, CancellationToken cancellationToken)
     {
         var message = Convert(consumeResult);
@@ -46,8 +43,11 @@ internal class DispatcherPipeline<TKey, TValue> : IChainOfResponsibility<Consume
         );
     }
 
+    public Task ExecuteAsync(ConsumeResult<byte[], byte[]> consumeResult, CancellationToken cancellationToken) =>
+        ((IChainOfResponsibility<ConsumeResult<byte[], byte[]>>) this).ExecuteAsyncImpl(_beforeChain.GetEnumerator(), consumeResult, cancellationToken);
+
     public Task ExecuteAsync(IKafkaConsumeResult<TKey, TValue> message, CancellationToken cancellationToken) =>
-        ((IChainOfResponsibility<IKafkaConsumeResult<TKey, TValue>>)this).ExecuteAsyncImpl(_afterChain.GetEnumerator(), message, cancellationToken);
+        ((IChainOfResponsibility<IKafkaConsumeResult<TKey, TValue>>) this).ExecuteAsyncImpl(_afterChain.GetEnumerator(), message, cancellationToken);
 
     Task IChainOfResponsibility<IKafkaConsumeResult<TKey, TValue>>.ExecuteHandlerAsync(IKafkaConsumeResult<TKey, TValue> message, CancellationToken cancellationToken) =>
         Task.WhenAll(_messageHandlers.Select(x => x.Handle(message, cancellationToken)));

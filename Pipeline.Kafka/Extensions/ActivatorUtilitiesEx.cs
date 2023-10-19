@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Pipeline.Kafka.Extensions;
 
@@ -8,12 +8,12 @@ public static class ActivatorUtilitiesEx
     {
         var factory = ActivatorUtilities.CreateFactory(typeof(TResult), new[]
         {
-            typeof(T1)
-        });
+        typeof(T1)
+    });
 
-        return (sp, arg1) => (TResult)factory(sp, new object?[]
+        return (sp, arg1) => (TResult) factory(sp, new object?[]
         {
-            arg1
+        arg1
         });
     }
 
@@ -21,14 +21,14 @@ public static class ActivatorUtilitiesEx
     {
         var factory = ActivatorUtilities.CreateFactory(typeof(TResult), new[]
         {
-            typeof(T1),
-            typeof(T2)
-        });
+        typeof(T1),
+        typeof(T2)
+    });
 
-        return (sp, arg1, arg2) => (TResult)factory(sp, new object?[]
+        return (sp, arg1, arg2) => (TResult) factory(sp, new object?[]
         {
-            arg1,
-            arg2
+        arg1,
+        arg2
         });
     }
 }

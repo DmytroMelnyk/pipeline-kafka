@@ -1,4 +1,4 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
 using Pipeline.Kafka.Extensions;
 
 namespace Pipeline.Kafka.Router;
@@ -14,22 +14,27 @@ internal class MessageConverter<TKey, TValue>
         _headersSelector = headersSelector ?? EmptyHeadersSelector;
     }
 
-    public IKafkaMessage<TKey, Null> ToTombstone(TValue value) =>
+    public IKafkaMessage<TKey, Null> ToTombstoneUsingKeySelector(TValue value) =>
         MessageFactory.CreateKafkaMessage<TKey, Null>(_keySelector(value), null!, h => _headersSelector(value, h));
 
-    public IKafkaMessage<TKey, Null> ToTombstone(TKey key, Action<Headers>? configure = null) =>
+    public static IKafkaMessage<TKey, Null> ToTombstone(TKey key, Action<Headers>? configure = null) =>
         MessageFactory.CreateKafkaMessage<TKey, Null>(key, null!, configure);
 
     public IKafkaMessage<TKey, TValue> ToKafkaMessage(TValue value) =>
         MessageFactory.CreateKafkaMessage(_keySelector(value), value, h => _headersSelector(value, h));
 
-    public IKafkaMessage<TKey, TValue> ToKafkaMessage(TKey key, TValue value, Action<Headers>? configure = null) =>
+    public static IKafkaMessage<TKey, TValue> ToKafkaMessage(TKey key, TValue value, Action<Headers>? configure = null) =>
         MessageFactory.CreateKafkaMessage(key, value, configure);
 
-    public IKafkaMessage<TKey, TValue> ToKafkaMessage(TKey key, TValue value, Headers headers, Timestamp? timestamp = null) =>
+    public static IKafkaMessage<TKey, TValue> ToKafkaMessage(TKey key, TValue value, Headers headers, Timestamp? timestamp = null) =>
         MessageFactory.CreateKafkaMessage(key, value, headers, timestamp.GetValueOrDefault(Timestamp.Default));
 
+#pragma warning disable S1172 // Unused method parameters should be removed
     private static TKey IgnoreKey(TValue _) => default!;
+#pragma warning restore S1172 // Unused method parameters should be removed
 
-    private static void EmptyHeadersSelector(TValue _, Headers __) { }
+    private static void EmptyHeadersSelector(TValue _, Headers __)
+    {
+        // Method intentionally left empty.
+    }
 }

@@ -1,4 +1,4 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using Pipeline.Kafka.Dispatcher;
@@ -11,7 +11,7 @@ namespace Pipeline.Kafka.Tests;
 public class KafkaMessageDispatcherOptionsTests
 {
     [Test]
-    public void KafkaMessageDispatcherOptions_WhenPipelineWasRegistered_ExpectedToGet()
+    public void KafkaMessageDispatcherOptionsWhenPipelineWasRegisteredExpectedToGet()
     {
         var dispatcherOptions = new KafkaMessageDispatcherOptions();
         dispatcherOptions.RegisterMessagePipelineFor<Ignore, PersonV2>(Version("2").And(TypeOf("Person")), Array.Empty<Type>());

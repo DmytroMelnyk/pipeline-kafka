@@ -1,4 +1,4 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
 using Pipeline.Kafka.Config;
 
 namespace Pipeline.Kafka.Client;

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Pipeline.Kafka;
+using System.Collections;
 
 namespace Pipeline.Kafka.Extensions;
 
@@ -9,7 +8,7 @@ public static class IEnumerableExtensions
 
     public static IBatch<T> ToBatch<T>(this IEnumerable<T> @this) => new Batch<T>(@this.ToList());
 
-    private class Batch<T> : IBatch<T>
+    private sealed class Batch<T> : IBatch<T>
     {
         private readonly IList<T> _list;
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Pipeline.Kafka.Config;
 
 namespace Pipeline.Kafka.Extensions;

@@ -1,4 +1,4 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
 using Pipeline.Kafka.Extensions;
 
 namespace Pipeline.Kafka.Pipeline;
@@ -25,9 +25,6 @@ internal class BatchDispatcherPipeline<TKey, TValue> : IChainOfResponsibility<IB
         _messageHandlers = messageHandlers;
     }
 
-    public Task ExecuteAsync(IBatch<ConsumeResult<byte[], byte[]>> consumeResults, CancellationToken cancellationToken) =>
-        ((IChainOfResponsibility<IBatch<ConsumeResult<byte[], byte[]>>>)this).ExecuteAsyncImpl(_beforeChain.GetEnumerator(), consumeResults, cancellationToken);
-
     Task IChainOfResponsibility<IBatch<ConsumeResult<byte[], byte[]>>>.ExecuteHandlerAsync(IBatch<ConsumeResult<byte[], byte[]>> consumeResults, CancellationToken cancellationToken)
     {
         var messages = Convert(consumeResults);
@@ -49,8 +46,11 @@ internal class BatchDispatcherPipeline<TKey, TValue> : IChainOfResponsibility<IB
         );
     }
 
+    public Task ExecuteAsync(IBatch<ConsumeResult<byte[], byte[]>> consumeResults, CancellationToken cancellationToken) =>
+        ((IChainOfResponsibility<IBatch<ConsumeResult<byte[], byte[]>>>) this).ExecuteAsyncImpl(_beforeChain.GetEnumerator(), consumeResults, cancellationToken);
+
     public Task ExecuteAsync(IBatch<IKafkaConsumeResult<TKey, TValue>> messages, CancellationToken cancellationToken) =>
-        ((IChainOfResponsibility<IBatch<IKafkaConsumeResult<TKey, TValue>>>)this).ExecuteAsyncImpl(_afterChain.GetEnumerator(), messages, cancellationToken);
+        ((IChainOfResponsibility<IBatch<IKafkaConsumeResult<TKey, TValue>>>) this).ExecuteAsyncImpl(_afterChain.GetEnumerator(), messages, cancellationToken);
 
     Task IChainOfResponsibility<IBatch<IKafkaConsumeResult<TKey, TValue>>>.ExecuteHandlerAsync(IBatch<IKafkaConsumeResult<TKey, TValue>> messages, CancellationToken cancellationToken) =>
         Task.WhenAll(_messageHandlers.Select(x => x.Handle(messages, cancellationToken)));

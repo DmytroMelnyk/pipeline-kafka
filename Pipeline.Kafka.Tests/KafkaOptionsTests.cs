@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using Pipeline.Kafka.Config;
 using Pipeline.Kafka.Extensions;
@@ -6,7 +7,7 @@ using Pipeline.Kafka.Extensions;
 namespace Pipeline.Kafka.Tests;
 
 [TestFixture]
-class KafkaOptionsTests
+internal sealed class KafkaOptionsTests
 {
     [Test]
     public void GetConfigFor_WhenNotIdempotentOperations_ExpectedConfigsAreEqual()
@@ -62,10 +63,18 @@ class KafkaOptionsTests
         Assert.That(readTopicConfig.BootstrapServers, Is.EqualTo("localhost:9092"));
     }
 
-    class KafkaDefaults
+    [SuppressMessage("Minor Code Smell", "S3459:Unassigned members should be removed", Justification = "<Pending>")]
+    [SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "<Pending>")]
+    private sealed class KafkaDefaults
     {
-        public required KafkaConsumerOptions ReadTopic { get; set; }
+        public required KafkaConsumerOptions ReadTopic
+        {
+            get; set;
+        }
 
-        public required KafkaProducerOptions WriteTopic { get; set; }
+        public required KafkaProducerOptions WriteTopic
+        {
+            get; set;
+        }
     }
 }

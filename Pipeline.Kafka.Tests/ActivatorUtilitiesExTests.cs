@@ -1,4 +1,4 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Pipeline.Kafka.Extensions;
@@ -7,7 +7,7 @@ using Pipeline.Kafka.Pipeline;
 namespace Pipeline.Kafka.Tests;
 
 [TestFixture]
-class ActivatorUtilitiesExTests
+internal sealed class ActivatorUtilitiesExTests
 {
     [Test]
     public void CreateFactory_WhenEveryServiceIsRegistered_ExpectedPipelineCreated()
@@ -23,7 +23,7 @@ class ActivatorUtilitiesExTests
         Assert.That(providerPipeline, Is.Not.Null);
     }
 
-    public class MyClass : IMessageHandler<Ignore, string>
+    public sealed class MyClass : IMessageHandler<Ignore, string>
     {
         public Task Handle(IKafkaMessage<Ignore, string> message, CancellationToken cancellationToken) => throw new NotImplementedException();
     }

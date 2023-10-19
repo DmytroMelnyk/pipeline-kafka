@@ -1,10 +1,10 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using Confluent.Kafka;
 using Pipeline.Kafka.Config;
 
 namespace Pipeline.Kafka.Client;
 
-internal class ConsumerFactory : IConsumerFactory, IDisposable
+internal sealed class ConsumerFactory : IConsumerFactory, IDisposable
 {
     private readonly ConcurrentQueue<IConsumer<byte[], byte[]>> _consumers = new();
 

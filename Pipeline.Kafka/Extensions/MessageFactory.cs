@@ -1,4 +1,4 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
 
 namespace Pipeline.Kafka.Extensions;
 
@@ -40,17 +40,32 @@ public class MessageFactory
 
     private record KafkaMessage<TKey, TValue> : IKafkaMessage<TKey, TValue>
     {
-        public required TKey Key { get; init; }
+        public required TKey Key
+        {
+            get; init;
+        }
 
-        public required Headers Headers { get; init; }
+        public required Headers Headers
+        {
+            get; init;
+        }
 
-        public required TValue Value { get; init; }
+        public required TValue Value
+        {
+            get; init;
+        }
 
-        public Timestamp Timestamp { get; init; }
+        public Timestamp Timestamp
+        {
+            get; init;
+        }
     }
 
-    private record KafkaConsumeResult<TKey, TValue> : KafkaMessage<TKey, TValue>, IKafkaConsumeResult<TKey, TValue>
+    private sealed record KafkaConsumeResult<TKey, TValue> : KafkaMessage<TKey, TValue>, IKafkaConsumeResult<TKey, TValue>
     {
-        public required TopicPartitionOffset TopicPartitionOffset { get; init; }
+        public required TopicPartitionOffset TopicPartitionOffset
+        {
+            get; init;
+        }
     }
 }

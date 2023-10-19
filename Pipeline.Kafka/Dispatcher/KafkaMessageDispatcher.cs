@@ -1,7 +1,6 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Pipeline.Kafka;
 using Pipeline.Kafka.Extensions;
 
 namespace Pipeline.Kafka.Dispatcher;

@@ -1,4 +1,5 @@
-﻿using Confluent.Kafka;
+using System.Diagnostics.CodeAnalysis;
+using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -55,6 +56,7 @@ public class KafkaIntegrationTests
 
     [Test]
     [Ignore("for local run")]
+    [SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "<Pending>")]
     public async Task TestBatchReading()
     {
         //await _serviceProvider.GetRequiredService<IHostedService>().StartAsync(CancellationToken.None);
@@ -67,27 +69,36 @@ public class KafkaIntegrationTests
 
 public class KafkaTopics2
 {
-    public required KafkaConsumerOptions TestTopic { get; set; }
+    public required KafkaConsumerOptions TestTopic
+    {
+        get; set;
+    }
 
-    public required KafkaProducerOptions TestPublishTopic { get; set; }
+    public required KafkaProducerOptions TestPublishTopic
+    {
+        get; set;
+    }
 
-    public required KafkaProducerOptions DeadLetterTopic { get; set; }
+    public required KafkaProducerOptions DeadLetterTopic
+    {
+        get; set;
+    }
 }
 
 public class BatchTestHandler : IBatchMessageHandler<Ignore, object>
 {
-    public Task Handle(IBatch<IKafkaMessage<Ignore, object>> messages, CancellationToken cancellationToken)
+    public Task Handle(IBatch<IKafkaMessage<Ignore, object>> message, CancellationToken cancellationToken)
     {
-        Console.WriteLine($"Batch handler: {messages.Count}");
+        Console.WriteLine($"Batch handler: {message.Count}");
         return Task.CompletedTask;
     }
 }
 
 public class CleanupHandler : IBatchMessageHandler<Ignore, Null>
 {
-    public Task Handle(IBatch<IKafkaMessage<Ignore, Null>> messages, CancellationToken cancellationToken)
+    public Task Handle(IBatch<IKafkaMessage<Ignore, Null>> message, CancellationToken cancellationToken)
     {
-        Console.WriteLine($"Cleanup handler: {messages.Count}");
+        Console.WriteLine($"Cleanup handler: {message.Count}");
         return Task.CompletedTask;
     }
 }

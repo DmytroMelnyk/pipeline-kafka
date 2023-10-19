@@ -1,4 +1,4 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
 using Pipeline.Kafka.Client;
 using Pipeline.Kafka.Config;
 
@@ -30,7 +30,7 @@ internal class RouterPipeline<TKey, TValue> : IChainOfResponsibility<IKafkaMessa
     }
 
     public Task PublishAsync(IKafkaMessage<TKey, TValue> message, CancellationToken cancellationToken) =>
-        ((IChainOfResponsibility<IKafkaMessage<TKey, TValue>>)this).ExecuteAsyncImpl(_before.GetEnumerator(), message, cancellationToken);
+        ((IChainOfResponsibility<IKafkaMessage<TKey, TValue>>) this).ExecuteAsyncImpl(_before.GetEnumerator(), message, cancellationToken);
 
     Task IChainOfResponsibility<IKafkaMessage<TKey, TValue>>.ExecuteHandlerAsync(IKafkaMessage<TKey, TValue> message, CancellationToken cancellationToken)
     {
@@ -46,7 +46,7 @@ internal class RouterPipeline<TKey, TValue> : IChainOfResponsibility<IKafkaMessa
     };
 
     public Task ExecuteAsync(Message<byte[], byte[]> message, CancellationToken cancellationToken) =>
-        ((IChainOfResponsibility<Message<byte[], byte[]>>)this).ExecuteAsyncImpl(_after.GetEnumerator(), message, cancellationToken);
+        ((IChainOfResponsibility<Message<byte[], byte[]>>) this).ExecuteAsyncImpl(_after.GetEnumerator(), message, cancellationToken);
 
     Task IChainOfResponsibility<Message<byte[], byte[]>>.ExecuteHandlerAsync(Message<byte[], byte[]> message, CancellationToken cancellationToken) =>
         _producer.ProduceAsync(_topicName, message, cancellationToken);

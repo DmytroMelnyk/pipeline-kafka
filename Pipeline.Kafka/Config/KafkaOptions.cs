@@ -1,25 +1,34 @@
-﻿using Confluent.Kafka;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Confluent.Kafka;
 
 namespace Pipeline.Kafka.Config;
 
-public class KafkaOptions<T>
+public class KafkaOptionsBase
 {
-    private static readonly string ApplicationName = Assembly.GetEntryAssembly()!.GetName().Name!;
+    protected KafkaOptionsBase()
+    {
+    }
 
+    protected static readonly string ApplicationName = Assembly.GetEntryAssembly()!.GetName().Name!;
+}
 
+public class KafkaOptions<T> : KafkaOptionsBase
+{
     private readonly HashSet<ClientConfig> _initialized = new();
 
-    public required T Topics { private get; init; }
+    public required T Topics
+    {
+        private get; init;
+    }
 
     public KafkaProducerOptions GetConfigFor(Func<T, KafkaProducerOptions> configGetter, [CallerArgumentExpression(nameof(configGetter))] string configGetterArg = "")
     {
         var config = configGetter(Topics);
         if (config is null)
         {
-            ThrowMisconfiguration(configGetter, "was not configured.");
+            KafkaOptions<T>.ThrowMisconfiguration(configGetter, "was not configured.");
         }
 
         Initialize(config);
@@ -31,7 +40,7 @@ public class KafkaOptions<T>
         var config = configGetter(Topics);
         if (config is null)
         {
-            ThrowMisconfiguration(configGetter, "was not configured.");
+            KafkaOptions<T>.ThrowMisconfiguration(configGetter, "was not configured.");
         }
 
         Initialize(config);
@@ -39,12 +48,7 @@ public class KafkaOptions<T>
     }
 
     [DoesNotReturn]
-#pragma warning disable IDE0060 // Remove unused parameter
-    internal void ThrowMisconfiguration<TConfig>(Func<T, TConfig> configGetter, string description, [CallerArgumentExpression(nameof(configGetter))] string configGetterArg = "")
-#pragma warning restore IDE0060 // Remove unused parameter
-    {
-        throw new InvalidOperationException($"Config section: {configGetterArg}: {description}.");
-    }
+    internal static void ThrowMisconfiguration<TConfig>(Func<T, TConfig> configGetter, string description, [CallerArgumentExpression(nameof(configGetter))] string configGetterArg = "") => throw new InvalidOperationException($"Config section: {configGetterArg}: {description}.");
 
     private void Initialize(KafkaProducerOptions config)
     {

@@ -1,4 +1,4 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
 using Pipeline.Kafka.Config;
 using Pipeline.Kafka.Extensions;
 using Pipeline.Kafka.Pipeline;
@@ -43,15 +43,15 @@ internal class KafkaRouter<TKey, TValue> : IKafkaRouterByValue<TValue>, IKafkaRo
         _routerPipelineFactory(sp).PublishAsync(_converter.ToKafkaMessage(value), cancellationToken);
 
     public Task PublishTombstoneAsync(IServiceProvider sp, TValue value, CancellationToken cancellationToken) =>
-        _tombstoneRouterPipelineFactory(sp).PublishAsync(_converter.ToTombstone(value), cancellationToken);
+        _tombstoneRouterPipelineFactory(sp).PublishAsync(_converter.ToTombstoneUsingKeySelector(value), cancellationToken);
 
     public Task PublishAsync(IServiceProvider sp, TKey key, TValue value, Action<Headers>? configure, CancellationToken cancellationToken) =>
-        _routerPipelineFactory(sp).PublishAsync(_converter.ToKafkaMessage(key, value, configure), cancellationToken);
+        _routerPipelineFactory(sp).PublishAsync(MessageConverter<TKey, TValue>.ToKafkaMessage(key, value, configure), cancellationToken);
 
     public Task PublishAsync(IServiceProvider sp, TKey key, TValue value, Headers headers, CancellationToken cancellationToken) =>
-        _routerPipelineFactory(sp).PublishAsync(_converter.ToKafkaMessage(key, value, headers), cancellationToken);
+        _routerPipelineFactory(sp).PublishAsync(MessageConverter<TKey, TValue>.ToKafkaMessage(key, value, headers), cancellationToken);
 
     public Task PublishTombstoneAsync(IServiceProvider sp, TKey key, Action<Headers>? configure, CancellationToken cancellationToken) =>
-        _tombstoneRouterPipelineFactory(sp).PublishAsync(_converter.ToTombstone(key, configure), cancellationToken);
+        _tombstoneRouterPipelineFactory(sp).PublishAsync(MessageConverter<TKey, TValue>.ToTombstone(key, configure), cancellationToken);
 
 }

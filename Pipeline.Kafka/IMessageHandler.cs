@@ -1,4 +1,4 @@
-﻿namespace Pipeline.Kafka;
+namespace Pipeline.Kafka;
 
 public interface IMessageHandler<in TMessage>
 {

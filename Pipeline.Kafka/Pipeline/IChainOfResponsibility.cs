@@ -1,4 +1,4 @@
-﻿namespace Pipeline.Kafka.Pipeline;
+namespace Pipeline.Kafka.Pipeline;
 
 internal interface IChainOfResponsibility<T>
 {

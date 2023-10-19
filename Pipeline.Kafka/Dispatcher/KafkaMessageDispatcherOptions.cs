@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Pipeline.Kafka.Extensions;
@@ -10,10 +10,7 @@ public class KafkaMessageDispatcherOptions
 {
     private readonly List<IPipelineProvider> _handlers = new();
 
-    public void RegisterMessagePipelineFor<TKey, TValue>(ConsumeResultSelectionStrategy messageSelectionStrategy, Type[] concreteHandlers)
-    {
-        _handlers.Add(new PipelineProvider<TKey, TValue>(messageSelectionStrategy, concreteHandlers));
-    }
+    public void RegisterMessagePipelineFor<TKey, TValue>(ConsumeResultSelectionStrategy messageSelectionStrategy, Type[] concreteHandlers) => _handlers.Add(new PipelineProvider<TKey, TValue>(messageSelectionStrategy, concreteHandlers));
 
     public bool TryGetMessagePipeline(ConsumeResult<byte[], byte[]> consumeResult,
         [NotNullWhen(true)] out Func<IServiceProvider, ConsumeResult<byte[], byte[]>, CancellationToken, Task>? pipeline,

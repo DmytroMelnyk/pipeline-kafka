@@ -1,16 +1,17 @@
-﻿using Confluent.Kafka;
+using System.Diagnostics.CodeAnalysis;
+using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
-using static Pipeline.Kafka.Dispatcher.DispatcherStrategy;
-using Pipeline.Kafka.Extensions;
-using Pipeline.Kafka.Config;
 using Pipeline.Kafka.Client;
+using Pipeline.Kafka.Config;
 using Pipeline.Kafka.Dispatcher;
+using Pipeline.Kafka.Extensions;
+using static Pipeline.Kafka.Dispatcher.DispatcherStrategy;
 
 namespace Pipeline.Kafka.Tests;
 
@@ -63,8 +64,10 @@ public class KafkaPipelineTests
             .AddSingleton(_personMessageHandlerMock.Object)
             .AddSingleton<IPipelineLink<Ignore, PersonV2>>(sp =>
             {
-                var _deadLetterLink = new Mock<DeadLetterValidationLink<PersonV2>>(sp.GetRequiredService<IMessagePublisher>());
-                _deadLetterLink.CallBase = true;
+                var _deadLetterLink = new Mock<DeadLetterValidationLink<PersonV2>>(sp.GetRequiredService<IMessagePublisher>())
+                {
+                    CallBase = true
+                };
                 _deadLetterLink
                     .SetupSequence(x => x.IsValid)
                     .Returns(true)
@@ -80,7 +83,8 @@ public class KafkaPipelineTests
     }
 
     [Test]
-    public async Task DeadLetterValidationLink_WhenMessageIsNotValid_ExpectedProduceToDeadLetterTopic()
+    [SuppressMessage("Major Code Smell", "S2925:\"Thread.Sleep\" should not be used in tests", Justification = "<Pending>")]
+    public async Task DeadLetterValidationLinkWhenMessageIsNotValidExpectedProduceToDeadLetterTopic()
     {
         _personTopicConsumerMock
             .SetupSequence(x => x.Consume(It.IsAny<CancellationToken>()))
@@ -113,7 +117,7 @@ public class KafkaPipelineTests
         }
 
         Assert.That(deadLetters, Has.Count.EqualTo(1));
-        Assert.That(deadLetters.First().TryGetValue("dead-letter-topic-partition-offset", out var headerValue), Is.True);
+        Assert.That(deadLetters[0].TryGetValue("dead-letter-topic-partition-offset", out var headerValue), Is.True);
         Assert.That(headerValue, Contains.Substring("Person-stage"));
     }
 
@@ -142,12 +146,12 @@ public abstract class DeadLetterValidationLink<TValue> : IPipelineLink<Ignore, T
 {
     private readonly IMessagePublisher _messagePublisher;
 
-    public DeadLetterValidationLink(IMessagePublisher messagePublisher)
-    {
-        _messagePublisher = messagePublisher;
-    }
+    protected DeadLetterValidationLink(IMessagePublisher messagePublisher) => _messagePublisher = messagePublisher;
 
-    public abstract bool IsValid { get; }
+    public abstract bool IsValid
+    {
+        get;
+    }
 
     public Task RunAsync(IKafkaConsumeResult<Ignore, TValue> message, Func<Task> next, CancellationToken cancellationToken)
     {
@@ -162,9 +166,18 @@ public abstract class DeadLetterValidationLink<TValue> : IPipelineLink<Ignore, T
 
 public class KafkaTopicsDeadLetter
 {
-    public required KafkaConsumerOptions Persons { get; init; }
+    public required KafkaConsumerOptions Persons
+    {
+        get; init;
+    }
 
-    public required KafkaProducerOptions Managers { get; init; }
+    public required KafkaProducerOptions Managers
+    {
+        get; init;
+    }
 
-    public required KafkaProducerOptions Deadletter { get; init; }
+    public required KafkaProducerOptions Deadletter
+    {
+        get; init;
+    }
 }

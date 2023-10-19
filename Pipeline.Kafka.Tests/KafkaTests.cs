@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -81,14 +81,14 @@ public class KafkaTests
     }
 
     [Test]
-    public void WhenKafkaWasRegistered_ExpectedAllOk()
+    public void WhenKafkaWasRegisteredExpectedAllOk()
     {
         var messageProviders = _serviceProvider.GetRequiredService<IEnumerable<IHostedService>>().ToList();
         Assert.That(messageProviders, Has.Count.EqualTo(5));
     }
 
     [Test]
-    public async Task IMessagePublisher_WhenPublishingToTheSameTopicDifferentEntities_ExpectedAllPublished()
+    public async Task IMessagePublisherWhenPublishingToTheSameTopicDifferentEntitiesExpectedAllPublished()
     {
         var messagePublisher = _serviceProvider.GetRequiredService<IMessagePublisher>();
         await messagePublisher.PublishAsync(new ManagerV1 { Id = 1 }, CancellationToken.None);
@@ -106,7 +106,7 @@ public class KafkaTests
     }
 
     [Test]
-    public async Task IMessageHandler_WhenMessagePublished_ExpectedMessageWasRead()
+    public async Task IMessageHandlerWhenMessagePublishedExpectedMessageWasRead()
     {
         _personTopicConsumerMock
             .Setup(x => x.Consume(It.IsAny<CancellationToken>()))
@@ -124,7 +124,7 @@ public class KafkaTests
         {
             await kafkaMessagePublisher.StopAsync(CancellationToken.None);
         }
-        var link = (GenericLink<Ignore, PersonV1>)_serviceProvider
+        var link = (GenericLink<Ignore, PersonV1>) _serviceProvider
             .GetServices<IPipelineLink<Ignore, PersonV1>>()
             .First(x => x is GenericLink<Ignore, PersonV1>);
 
@@ -155,9 +155,15 @@ public class KafkaTests
 
 public class KafkaTopics
 {
-    public required KafkaConsumerOptions Persons { get; init; }
+    public required KafkaConsumerOptions Persons
+    {
+        get; init;
+    }
 
-    public required KafkaProducerOptions Managers { get; init; }
+    public required KafkaProducerOptions Managers
+    {
+        get; init;
+    }
 }
 
 public class ObsoleteNotificator : IPipelineLink<Ignore, object>
@@ -171,7 +177,7 @@ public class ObsoleteNotificator : IPipelineLink<Ignore, object>
 
 public class GenericLink<TKey, TValue> : IPipelineLink<TKey, TValue>
 {
-    public int Counter = 0;
+    public int Counter;
 
     public Task RunAsync(IKafkaConsumeResult<TKey, TValue> message, Func<Task> next, CancellationToken cancellationToken)
     {
@@ -188,10 +194,7 @@ public class PersonHandler : IMessageHandler<Ignore, PersonV1>, IMessageHandler<
         return Task.CompletedTask;
     }
 
-    public Task Handle(IKafkaMessage<Ignore, PersonV2> message, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+    public Task Handle(IKafkaMessage<Ignore, PersonV2> message, CancellationToken cancellationToken) => throw new NotImplementedException();
 }
 
 public class PersonHandler2 : IMessageHandler<Ignore, PersonV1>
@@ -205,26 +208,47 @@ public class PersonHandler2 : IMessageHandler<Ignore, PersonV1>
 
 public class PersonV1
 {
-    public required int Id { get; set; }
+    public required int Id
+    {
+        get; set;
+    }
 
-    public string? Name { get; set; }
+    public string? Name
+    {
+        get; set;
+    }
 }
 
 public class ManagerV2 : PersonV2
 {
-    public string? Title { get; set; }
+    public string? Title
+    {
+        get; set;
+    }
 }
 
 public class ManagerV1 : PersonV1
 {
-    public string? Title { get; set; }
+    public string? Title
+    {
+        get; set;
+    }
 }
 
 public class PersonV2
 {
-    public required int Id { get; set; }
+    public required int Id
+    {
+        get; set;
+    }
 
-    public string? FirstName { get; set; }
+    public string? FirstName
+    {
+        get; set;
+    }
 
-    public string? LastName { get; set; }
+    public string? LastName
+    {
+        get; set;
+    }
 }

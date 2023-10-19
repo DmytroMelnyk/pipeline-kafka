@@ -1,19 +1,16 @@
-﻿using Confluent.Kafka;
-using Pipeline.Kafka.Config;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
+using Confluent.Kafka;
+using Pipeline.Kafka.Config;
 
 namespace Pipeline.Kafka.Client;
 
-internal class ProducerFactory : IProducerFactory, IDisposable
+internal sealed class ProducerFactory : IProducerFactory, IDisposable
 {
     private readonly ConcurrentDictionary<ProducerConfig, Lazy<IProducer<byte[], byte[]>>> _producerBuilders = new(new ProducerConfigEqualityComparer());
 
-    public Lazy<IProducer<byte[], byte[]>> GetProducerLazy(KafkaProducerOptions options)
-    {
-        return _producerBuilders
+    public Lazy<IProducer<byte[], byte[]>> GetProducerLazy(KafkaProducerOptions options) => _producerBuilders
             .GetOrAdd(options, new Lazy<IProducer<byte[], byte[]>>(() => new ProducerBuilder<byte[], byte[]>(options).Build(), LazyThreadSafetyMode.ExecutionAndPublication));
-    }
 
     public void Dispose()
     {
@@ -23,7 +20,7 @@ internal class ProducerFactory : IProducerFactory, IDisposable
         }
     }
 
-    private class ProducerConfigEqualityComparer : IEqualityComparer<ProducerConfig>
+    private sealed class ProducerConfigEqualityComparer : IEqualityComparer<ProducerConfig>
     {
         public bool Equals(ProducerConfig? x, ProducerConfig? y)
         {
@@ -45,9 +42,6 @@ internal class ProducerFactory : IProducerFactory, IDisposable
             return x.SequenceEqual(y);
         }
 
-        public int GetHashCode([DisallowNull] ProducerConfig obj)
-        {
-            return obj.BootstrapServers.GetHashCode();
-        }
+        public int GetHashCode([DisallowNull] ProducerConfig obj) => obj.BootstrapServers.GetHashCode();
     }
 }

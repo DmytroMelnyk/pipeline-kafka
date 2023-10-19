@@ -1,10 +1,10 @@
-﻿using Pipeline.Kafka.Router;
 using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Pipeline.Kafka.Client;
 using Pipeline.Kafka.Config;
+using Pipeline.Kafka.Router;
 using static Pipeline.Kafka.Dispatcher.DispatcherStrategy;
 
 namespace Pipeline.Kafka.Dispatcher;
@@ -38,7 +38,7 @@ public class KafkaMessagingBuilder<TKafkaConfig>
         var consumerOptions = _kafkaOptions.GetConfigFor(topicSelector);
         if (!consumerOptions.MaxBatchSize.HasValue)
         {
-            _kafkaOptions.ThrowMisconfiguration(topicSelector, $"{nameof(consumerOptions.MaxBatchSize)} must be configured in order to use batching");
+            KafkaOptions<TKafkaConfig>.ThrowMisconfiguration(topicSelector, $"{nameof(consumerOptions.MaxBatchSize)} must be configured in order to use batching");
         }
 
         RegisterPool(consumerOptions, sp => ActivatorUtilities
@@ -84,7 +84,7 @@ public class KafkaMessagingBuilder<TKafkaConfig>
     {
         // https://github.com/dotnet/runtime/issues/38751#issuecomment-1140062372
         var poolSize = consumerOptions.PoolSize.GetValueOrDefault(1);
-        for (int i = 0; i < poolSize; i++)
+        for (var i = 0; i < poolSize; i++)
         {
             _serviceCollection.AddSingleton<IHostedService>(factory);
         }

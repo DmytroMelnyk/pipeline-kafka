@@ -1,4 +1,5 @@
-﻿using Confluent.Kafka;
+using System.Diagnostics.CodeAnalysis;
+using Confluent.Kafka;
 using Pipeline.Kafka.Extensions;
 
 namespace Pipeline.Kafka.Dispatcher;
@@ -13,6 +14,7 @@ public static class DispatcherStrategy
     /// <param name="type">if not set it will be equal to message type name</param>
     /// <param name="typeKey">keyword that is responsible for type metadata</param>
     /// <returns></returns>
+    [SuppressMessage("Major Code Smell", "S1172:Unused method parameters should be removed", Justification = "<Pending>")]
     public static ConsumeResultSelectionStrategy TypeOf(string? type = null, string typeKey = "type")
     {
         return type is null ? SelfDescribed : Header(typeKey, type);
@@ -68,10 +70,7 @@ public static class DispatcherStrategy
     private static ConsumeResultSelectionStrategy Header(string headerKey, string headerValue)
     {
         return HeaderStrategy;
-        bool HeaderStrategy(ConsumeResult<byte[], byte[]> consumeResult, Type handlerKeyType, Type handlerValueType)
-        {
-            return consumeResult.Message.Headers.TryGetValue(headerKey, out var header) && header == headerValue;
-        }
+        bool HeaderStrategy(ConsumeResult<byte[], byte[]> consumeResult, Type handlerKeyType, Type handlerValueType) => consumeResult.Message.Headers.TryGetValue(headerKey, out var header) && header == headerValue;
     }
 
     public static ConsumeResultSelectionStrategy And(this ConsumeResultSelectionStrategy left, ConsumeResultSelectionStrategy right) =>

@@ -1,4 +1,4 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
 
 namespace Pipeline.Kafka;
 
@@ -18,9 +18,9 @@ public interface IMessagePublisher
 
     Task PublishAsync<TKey, TValue>(TKey key, TValue message, Headers headers, CancellationToken cancellationToken);
 
-    Task PublishTombstoneAsync<TKey, TValue>(TKey key, Action<Headers>? configure, CancellationToken cancellationToken);
-
     Task PublishAsync<TValue>(TValue message, CancellationToken cancellationToken);
+
+    Task PublishTombstoneAsync<TKey, TValue>(TKey key, Action<Headers>? configure, CancellationToken cancellationToken);
 
     Task PublishTombstoneAsync<TValue>(TValue message, CancellationToken cancellationToken);
 }

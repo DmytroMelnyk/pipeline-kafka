@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using Pipeline.Kafka.Extensions;
 using Pipeline.Kafka.Pipeline;
 
@@ -8,7 +8,7 @@ namespace Pipeline.Kafka.Tests;
 public class ChainOfResponsibilityTests
 {
     [Test]
-    public async Task RemoveAt_WhenCalledOnce_ExpectedMinusOneLementInBatch()
+    public async Task RemoveAtWhenCalledOnceExpectedMinusOneLementInBatch()
     {
         var arr = new List<string> { "str1", "str2" };
         var chain = new Chain(Enumerable.Repeat(new BatchLink(), 1));
@@ -30,12 +30,15 @@ public class Chain : IChainOfResponsibility<IBatch<string>>
 {
     private readonly IEnumerable<IBatchPipelineLink<string>> _links;
 
-    public IBatch<string>? Messages { get; set; }
+    public IBatch<string>? Messages
+    {
+        get; set;
+    }
 
     public Chain(IEnumerable<IBatchPipelineLink<string>> links) => _links = links;
 
     public Task ExecuteAsync(IBatch<string> batch, CancellationToken cancellationToken) =>
-        ((IChainOfResponsibility<IBatch<string>>)this).ExecuteAsyncImpl(_links.GetEnumerator(), batch, cancellationToken);
+        ((IChainOfResponsibility<IBatch<string>>) this).ExecuteAsyncImpl(_links.GetEnumerator(), batch, cancellationToken);
 
     Task IChainOfResponsibility<IBatch<string>>.ExecuteHandlerAsync(IBatch<string> message, CancellationToken cancellationToken)
     {

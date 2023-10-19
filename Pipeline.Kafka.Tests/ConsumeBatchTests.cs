@@ -1,4 +1,4 @@
-﻿using Confluent.Kafka;
+using Confluent.Kafka;
 using Moq;
 using NUnit.Framework;
 using Pipeline.Kafka.Extensions;
@@ -6,7 +6,7 @@ using Pipeline.Kafka.Extensions;
 namespace Pipeline.Kafka.Tests;
 
 [TestFixture]
-class ConsumeBatchTests
+internal sealed class ConsumeBatchTests
 {
     [TestCase(1, 0)]
     [TestCase(2, 1)]
