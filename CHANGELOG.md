@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/DmytroMelnyk/pipeline-kafka/compare/v1.0.1...v1.0.2) (2023-10-19)
+
+
+### Bug Fixes
+
+* Simplify testing setup ([#5](https://github.com/DmytroMelnyk/pipeline-kafka/issues/5)) ([2d9ebe2](https://github.com/DmytroMelnyk/pipeline-kafka/commit/2d9ebe237b2e0b883c635941970efb1d3bb1b1cb))
+
 ## [1.0.1](https://github.com/DmytroMelnyk/pipeline-kafka/compare/v1.0.0...v1.0.1) (2023-10-19)
 
 
