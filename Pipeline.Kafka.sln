@@ -11,9 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipeline.Kafka", "..\..\..\..\Dmytro Melnyk\source\repos\kafka-lib\Pipeline.Kafka\Pipeline.Kafka.csproj", "{E7929B55-A6F8-4159-95A7-9D1E93026AD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipeline.Kafka", ".\Pipeline.Kafka\Pipeline.Kafka.csproj", "{E7929B55-A6F8-4159-95A7-9D1E93026AD5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipeline.Kafka.Tests", "..\..\..\..\Dmytro Melnyk\source\repos\kafka-lib\Pipeline.Kafka.Tests\Pipeline.Kafka.Tests.csproj", "{D8BC097F-B8B1-418B-AF35-8015EDC10010}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipeline.Kafka.Tests", ".\Pipeline.Kafka.Tests\Pipeline.Kafka.Tests.csproj", "{D8BC097F-B8B1-418B-AF35-8015EDC10010}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
