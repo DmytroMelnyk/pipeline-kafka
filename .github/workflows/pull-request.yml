@@ -112,7 +112,7 @@ jobs:
         echo $NEXT_VERSION | tee build-version.txt
 
     - name: Upload build-version.txt
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with: 
         name: build-version.txt
         path: build-version.txt
