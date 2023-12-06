@@ -1,6 +1,6 @@
 # Pipeline Kafka
 
-For simple example refer to Pipeline.Kafka.Tests/KafkaIntegrationTests.cs
+For simple example refer to [Pipeline.Kafka.Tests/KafkaIntegrationTests.cs](https://github.com/DmytroMelnyk/pipeline-kafka/blob/main/Pipeline.Kafka.Tests/KafkaIntegrationTests.cs)
 
 To format all projects according to the `.editorconfig` file use: `dotnet format` command
 
