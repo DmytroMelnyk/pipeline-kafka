@@ -61,7 +61,7 @@ jobs:
         # https://github.com/semantic-release/semantic-release/issues/1890#issuecomment-974512960
         ref: ${{ github.head_ref }}
 
-    - uses: actions/setup-dotnet@v3
+    - uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '7.0.x'
         
