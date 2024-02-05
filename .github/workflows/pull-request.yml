@@ -73,7 +73,7 @@ jobs:
         dotnet test
 
     - name: ReportGenerator
-      uses: danielpalme/ReportGenerator-GitHub-Action@5.2.0
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.2.1
       with:
         reports: './CoverletReport/*.xml'
         targetdir: './coveragereport'
